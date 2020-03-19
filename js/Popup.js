@@ -8,11 +8,6 @@ class Popup {
   }
 
   close() {
-    console.log(this.node);
     this.node.classList.remove("popup_is-opened");
-  }
-
-  toggle() {
-    this.node.classList.toggle("popup_is-opened");
   }
 }

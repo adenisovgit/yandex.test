@@ -11,28 +11,6 @@ function toggleFormAdd(){//коллбэк для открытия и закры�
     formPopupAddCard.classList.toggle("popup_is-opened");
 }
 
-function openFormProfile(){//коллбэк для открытия формы профиля
-    document.forms.profile.elements.name.value = userInfoName.textContent;
-    document.forms.profile.elements.job.value = userInfoJob.textContent;
-    formPopupProfile.classList.toggle("popup_is-opened");
-    validateProfileForm();
-}
-function closeFormProfile(){//коллбэк для закрытия формы профиля
-    formPopupProfile.classList.toggle("popup_is-opened");
-}
-
-function submitFormProfile(event){//коллбэк для сабмита формы профиля
-    event.preventDefault();
-    if(!document.querySelector("#profile .popup__button").classList.contains("popup__button_enable")){//кнопка "выключена", т.е. данные в форме невалидные
-        return;
-    }
-
-    userInfoName.textContent = document.forms.profile.elements.name.value;
-    userInfoJob.textContent = document.forms.profile.elements.job.value;
-    formPopupProfile.classList.toggle("popup_is-opened");
-}
-
-
 function submitFormAdd(event) {
     const form = event.currentTarget;
     event.preventDefault();
@@ -44,7 +22,6 @@ function submitFormAdd(event) {
     toggleFormAdd();
     form.reset();
 }
-
 
 function initCallback(){
 
@@ -60,24 +37,14 @@ function initCallback(){
     document.forms.new.addEventListener("submit", submitFormAdd);
 
 
-    // нажатие на кнопку Edit
-    const buttonEdit = document.querySelector(".button.user-info__edit");
-    buttonEdit.addEventListener("click", openFormProfile);
-
-    // закрытие формы редактирования профиля
-    const crossButtonEdit = document.querySelector("#profile .popup__close");
-    crossButtonEdit.addEventListener("click", closeFormProfile);
-
-    // сабмит формы редактирования профиля
-    document.forms.profile.addEventListener("submit", submitFormProfile);
-
-    //валидация редактирования профиля
-    document.forms.profile.elements.name.addEventListener("input", validateProfileForm);
-    document.forms.profile.elements.job.addEventListener("input", validateProfileForm);
-
     //валидация добавления новой карточки
     document.forms.new.elements.name.addEventListener("input", validateAddCardForm);
     document.forms.new.elements.link.addEventListener("input", validateAddCardForm);
+
+    // нажатие на кнопку Edit
+    const buttonEdit = document.querySelector(".button.user-info__edit");
+    buttonEdit.addEventListener("click", profileForm.open.bind(profileForm));
+
 }
 
 // 0 - пустая строка
@@ -155,7 +122,11 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
+
+
+const profileForm = new PopupProfile(formPopupProfile);
 const popupImage = new PopupImage(bigSizeImage);
 const cardList = new CardList(cards, initialCards);
+
 cardList.render();
 initCallback();
